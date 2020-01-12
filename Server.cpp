@@ -3,6 +3,7 @@
 //
 
 #include "Server.h"
+#include "ClientHandler.h"
 #include <stdio.h>
 #include <bits/socket.h>
 #include <sys/socket.h>
@@ -14,7 +15,7 @@
 using namespace std;
 namespace server_side {
 
-    bool Server::open(int port) {
+    bool Server::open(int port ,ClientHandler *clientHandler) {
         //create socket
         int socketfd = socket(AF_INET, SOCK_STREAM, 0);
         if (socketfd == -1) {
