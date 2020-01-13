@@ -9,8 +9,9 @@
 
 class MySerialServer : public server_side::Server {
 public:
-    // listening to port - we already done it ?
-    void start(int port);
+    MySerialServer(ClientHandler *clientHandler_);
+    bool open(int port, ClientHandler *clientHandler);
+    void stop();
 };
 
 

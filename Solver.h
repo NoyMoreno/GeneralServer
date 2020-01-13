@@ -9,7 +9,7 @@
 template <typename P, typename S>
 class Solver {
 public:
-    virtual void solve(std::string s) = 0;
+    virtual S solve(P problem) = 0;
 };
 
 

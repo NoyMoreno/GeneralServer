@@ -7,6 +7,7 @@
 
 template <typename P, typename S>
 class CacheManager {
+public:
 
 };
 

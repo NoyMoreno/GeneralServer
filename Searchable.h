@@ -4,10 +4,10 @@
 
 #ifndef PROJECT2_SEARCHABLE_H
 #define PROJECT2_SEARCHABLE_H
-
-
+#if 0
 class Searchable {
     //get initial state
+
     virtual State<T> *getInitialState() = 0;
 
     virtual bool isGoalState(State <T> state) = 0;
@@ -18,3 +18,4 @@ class Searchable {
     virtual ~Searchable() {}
 };
 #endif //PROJECT2_SEARCHABLE_H
+#endif

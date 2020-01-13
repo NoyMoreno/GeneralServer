@@ -9,9 +9,8 @@
 #include <string>
 
 class ClientHandler {
-    /*wrong - is output and input , ask shaltiel*/
-    virtual void handelClient(std::string input, std::string output) = 0;
-
+public:
+    virtual void handelClient(int socket) = 0;
 };
 
 

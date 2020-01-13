@@ -5,19 +5,24 @@
 #ifndef PROJECT2_MYCLIENTHANDLER_H
 #define PROJECT2_MYCLIENTHANDLER_H
 
-
+#include <stdio.h>
+#include <sys/socket.h>
+#include <iostream>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <thread>
 #include "ClientHandler.h"
 #include "Solver.h"
 #include "CacheManager.h"
 using namespace std;
 
 class MyClientHandler : public ClientHandler {
-private:
-    // ********************need to contain solver obj
-    CacheManager<string, string> *cacheManager{};
-
+protected:
+    Solver<string, string> *s;
+    CacheManager<string, string> *cacheManager;
 public:
-
+    MyClientHandler(Solver<string, string> *solver, CacheManager<string, string> *cacheManager_);
+    void handelClient(int socket);
 
 };
 
