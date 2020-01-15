@@ -6,7 +6,8 @@
 #include "FileCacheManager.h"
 #include "Server.h"
 #include "MySerialServer.h"
-
+#include "ISearchable.h"
+#include "ISearcher.h"
 
 using namespace std;
 using namespace server_side;
