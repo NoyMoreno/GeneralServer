@@ -10,12 +10,13 @@
 
 template<typename T, typename  C>
 class ISearchable {
+public:
     //get initial state
-    virtual State<T, C> *getInitialState() = 0;
+    virtual State<T, C> getInitialState() = 0;
     // the end
-    virtual bool isGoalState(State <T, C> *state) = 0;
+    virtual bool isGoalState(State <T, C> state) = 0;
     //פונקציית המעברים
-    virtual std::vector<State<T, C>*> getAllPossibleStates(State<T, C> *state) = 0;
-    virtual ~ISearchable();
+    virtual std::vector<State<T, C>> getAllPossibleStates(State<T, C> state) = 0;
+    virtual ~ISearchable() {};
 };
 #endif //PROJECT2_ISEARCHABLE_H

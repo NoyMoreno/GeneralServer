@@ -48,15 +48,14 @@ bool MySerialServer::open(int port, ClientHandler *clientHandler) {
         std::cerr<<"Error accepting client"<<std::endl;
         return -4;
     }
-//    close(socketfd); //closing the listening socket
+    close(socketfd); //closing the listening socket
 
     cout << "Connection made!" << endl;
 //    stop();
     // We separated communication from the way we communicate.
     //In this function we will begin to communicate
-    clientHandler->handelClient(client_socket);
-
-
+    clientHandler->handleClient(client_socket);
+    close(client_socket);
 //    thread t(this->runServer, client_socket, &fClose, close_mutex, clientHandler);
 //    t.detach();
     return 1;

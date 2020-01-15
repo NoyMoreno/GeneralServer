@@ -5,43 +5,52 @@
 #ifndef PROJECT2_STATE_H
 #define PROJECT2_STATE_H
 
-template< typename T, typename C>
+template<typename T, typename C>
 class State {
-private:
-    T m_state;
-    C m_cost;
-    State<T, C> *m_cameFrom;
 public:
-    State(T state) {
-       m_state = state;
-       m_cameFrom =nullptr;
-       //m_cost =
+    State() : m_state(T()), m_cost(C()) {}
+    ~State() { delete m_cameFrom; }
+    State(T state, C cost) : m_state(state), m_cost(cost) {
+       m_cameFrom = nullptr;
     }
     // check if this State and "other" State are equals.
     bool operator==(State<T,C> other) {
         return (this->m_state == other.m_state);
     }
+    // check if this State and "other" State are equals.
+    bool operator==(State<T,C> other) const {
+        return (this->m_state == other.m_state);
+    }
+    // check if this State and "other" State are equals.
+    bool operator!=(State<T,C> other) {
+        return !(this->m_state == other.m_state);
+    }
     bool operator<(State<T,C> other) {
-        return this->cost == other.cost;
+        return this->m_cost < other.getC();
+    }
+    bool operator<(const State<T,C> other) const {
+        return this->m_cost < other.getC();
     }
     T getT() {
         return m_state;
     }
-    C getC() {
+    C getC() const {
         return m_cost;
     }
-    void setCameFrom(State<T,C> *cameFrom)
-    {
-        m_cameFrom(cameFrom);
+    void setCameFrom(State<T,C> cameFrom) {
+        m_cameFrom = new State<T,C>(cameFrom);
     }
     void setCost(C cost){
-        m_cost(cost);
+        m_cost = cost;
     }
-    State<T,C> *getCameFrom(State<T,C> *state)
+    State<T,C> getCameFrom()
     {
-        return m_cameFrom;
+        return *m_cameFrom;
     }
-
+private:
+    T m_state;
+    C m_cost;
+    State<T, C> *m_cameFrom;
 };
 
 

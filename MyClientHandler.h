@@ -14,15 +14,16 @@
 #include "ClientHandler.h"
 #include "Solver.h"
 #include "CacheManager.h"
+#include <vector>
 using namespace std;
 
 class MyClientHandler : public ClientHandler {
 protected:
-    Solver<string, string> *s;
-    CacheManager<string, string> *cacheManager;
+    Solver<vector<string>, string> *s;
+    CacheManager<vector<string>, string> *cacheManager;
 public:
-    MyClientHandler(Solver<string, string> *solver, CacheManager<string, string> *cacheManager_);
-    void handelClient(int socket);
+    MyClientHandler(Solver<vector<string>, string> *solver, CacheManager<vector<string>, string> *cacheManager_);
+    void handleClient(int socket);
 
 };
 

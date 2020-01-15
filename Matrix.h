@@ -6,33 +6,49 @@
 #define PROJECT2_MATRIX_H
 
 #include "ISearchable.h"
+#include <string>
+#include <unordered_map>
 
-struct Cell {
+class Cell {
 private:
     int m_i;
     int m_j;
 public:
+    Cell(){}
     Cell(int i, int j){
         m_i = i;
         m_j = j;
     }
-    int getI() {
+    int getI() const {
         return m_i;
     }
-    int getJ() {
+    int getJ() const {
         return m_j;
     }
 };
-class Matrix : ISearchable<Cell, double> {
-    Matrix(int row, int column, std::vector<State<Cell, double>*> initials);
-    //get initial state
-    State<Cell, double > *getInitialState();
-    // the end
-    bool isGoalState(State <Cell, double > *state);
-    //פונקציית המעברים
-    std::vector<State<Cell, double >*> getAllPossibleStates(State<Cell, double > *state);
-    ~Matrix(){
+inline bool operator==(Cell c1, Cell c2) {
+    return c1.getI() == c2.getI() && c1.getJ() == c2.getJ();
+}
 
+struct CellHash {
+    size_t operator()(const Cell &c) const {
+        return ((size_t)c.getI() << 32) | c.getJ();
+    }
+};
+
+class Matrix : public ISearchable<Cell, double> {
+private:
+    Cell startCell, endCell;
+    std::unordered_map<Cell, double, CellHash> _matrix;
+public:
+    Matrix(std::vector<std::string> s);
+    //get initial state
+    State<Cell, double> getInitialState();
+    // the end
+    bool isGoalState(State<Cell, double> state);
+    //פונקציית המעברים
+    std::vector<State<Cell, double>> getAllPossibleStates(State<Cell, double> state);
+    ~Matrix() {
     }
 };
 

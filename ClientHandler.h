@@ -10,7 +10,7 @@
 
 class ClientHandler {
 public:
-    virtual void handelClient(int socket) = 0;
+    virtual void handleClient(int socket) = 0;
 };
 
 
