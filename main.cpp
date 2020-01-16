@@ -11,6 +11,7 @@
 #include "ISearcher.h"
 #include "MyStringConverter.h"
 #include "MatrixSearchSolver.h"
+#include "Server.h"
 
 using namespace std;
 using namespace server_side;
@@ -21,7 +22,8 @@ int main(int args, char *argv[]) {
 //      return 0;
    }
    MatrixSearchSolver solver;
-   CacheManager<vector<string>, string> *cacheManager = new CacheManager<vector<string>, string>(new MyStringConverter());
+   //CacheManager<vector<string>, string> *cacheManager = new CacheManager<vector<string>, string>(new MyStringConverter());
+   CacheManager<string,string> *cacheManager = new FileCacheManager();
    ClientHandler *clientHandler = new MyClientHandler(&solver, cacheManager);
 
    int port = 5600;

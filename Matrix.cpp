@@ -31,14 +31,13 @@ Matrix::Matrix(std::vector<std::string> input) {
     for (iRow = 0; iRow < total_rows; iRow++) {
         // Get all the numbers
         std::vector<double> values = parseLineToValues(input[iRow]);
-        int iCol;
-        for (iCol = 0; iCol < values.size(); iCol++) {
+        for (int iCol = 0; iCol < values.size(); iCol++) {
             if (values[iCol] != -1)
                 _matrix[Cell(iRow, iCol)] = values[iCol];
         }
     }// next row
 
-    // Get the start and end
+    // Get the start and end - the double of this cells is the i and the j
     std::vector<double> finalVals = parseLineToValues(input[input.size() - 2]);
     Cell c(finalVals[0], finalVals[1]);
     startCell = c;
@@ -73,4 +72,8 @@ std::vector<State<Cell, double>> Matrix::getAllPossibleStates(State<Cell, double
     }
 
     return vec;
+}
+
+std::string Matrix::problemToString(std::vector<std::string> matrixAsDataClient) {
+    return std::__cxx11::string();
 }

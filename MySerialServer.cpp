@@ -51,7 +51,6 @@ bool MySerialServer::open(int port, ClientHandler *clientHandler) {
     close(socketfd); //closing the listening socket
 
     cout << "Connection made!" << endl;
-//    stop();
     // We separated communication from the way we communicate.
     //In this function we will begin to communicate
     clientHandler->handleClient(client_socket);

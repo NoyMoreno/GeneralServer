@@ -48,6 +48,9 @@ public:
     bool isGoalState(State<Cell, double> state);
     //פונקציית המעברים
     std::vector<State<Cell, double>> getAllPossibleStates(State<Cell, double> state);
+    // convert problem to string
+    std::string problemToString(std::vector<std::string> matrixAsDataClient);
+
     ~Matrix() {
     }
 };

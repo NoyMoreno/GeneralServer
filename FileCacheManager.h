@@ -12,7 +12,24 @@
 
 class FileCacheManager : public CacheManager <string, string> {
 private:
-    std::unordered_map<std::string, std::string> m_map;
+    std::unordered_map<std::string, std::string> problemsToSolutions_map;
+public:
+    FileCacheManager();
+    // check if the solution already exist.
+     bool haveSolution(string problem);
+
+    // get the solution. The user have to check if the solution isSaved cameFrom get it.
+    string getSolution(string problem);
+
+    // save the solution to the problem
+    void saveSolution(string problem, string solution);
+
+    //add pair of problem and his solution to file
+    void addToFile(string problem, string solution);
+
+    // write the info
+    void WriteToFile(bool toAppend, string problem, string solution);
+    ~FileCacheManager(){}
 };
 
 

@@ -14,17 +14,20 @@
 #include "ClientHandler.h"
 #include "Solver.h"
 #include "CacheManager.h"
+#include "Matrix.h"
 #include <vector>
 using namespace std;
 
 class MyClientHandler : public ClientHandler {
 protected:
-    Solver<vector<string>, string> *s;
-    CacheManager<vector<string>, string> *cacheManager;
+    //Solver<vector<string>, string> *m_solver;
+    Solver<ISearchable<Cell, double> *, vector<State<Cell, double>>> *m_solver;
+    CacheManager<string, string> *m_cacheManager;
 public:
-    MyClientHandler(Solver<vector<string>, string> *solver, CacheManager<vector<string>, string> *cacheManager_);
+    MyClientHandler(Solver<ISearchable<Cell, double> *, vector<State<Cell, double>>> *solver, CacheManager<string, string> *cacheManager_);
     void handleClient(int socket);
 
+    string convertMatrixToString(vector<string> vector);
 };
 
 
