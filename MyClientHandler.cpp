@@ -8,7 +8,7 @@
 
 using namespace std;
 //Solver<std::vector<string>, string>
-MyClientHandler::MyClientHandler(Solver<ISearchable<Cell, double> *, vector<State<Cell, double>>> *solver, CacheManager<string, string> *cacheManager) {
+MyClientHandler::MyClientHandler(Solver<vector<string>, string> *solver, CacheManager<string, string> *cacheManager) {
 
     this->m_solver = solver;
     this->m_cacheManager = cacheManager;
@@ -16,19 +16,19 @@ MyClientHandler::MyClientHandler(Solver<ISearchable<Cell, double> *, vector<Stat
 void MyClientHandler::handleClient(int client_socket) {
     //reading from client - this vector will represent the matrix's rows
     vector<string> clientData;
-    int buf_idx = 0;
     char buffer[1024] = {0};
-    while (read(client_socket, buffer, 1024)) {
+    int r;
+    while ((r = read(client_socket, buffer, 1024))) {
+        buffer[r] = 0;
         string curS = string(buffer);
         clientData.push_back(curS);
         if (!curS.rfind("end", 0))// if it starts with end
             break;
     }
-    // creat Matrix as searchable
-    ISearchable<Cell, double> *matrix = new Matrix(clientData);
     // check if we solve it already
     this->m_cacheManager->haveSolution(convertMatrixToString(clientData));
-    std::vector<State<Cell, double>> res = this->m_solver->solve(matrix);
+    string res = this->m_solver->solve(clientData);
+    cout << res << endl;
 
 
 //    std::string res = cacheManager->get(clientData);
@@ -36,9 +36,14 @@ void MyClientHandler::handleClient(int client_socket) {
 //        return;
 //    cacheManager->put(clientData, s->solve(clientData));
 }
-***********************************************************************************
+//***********************************************************************************
 string MyClientHandler::convertMatrixToString(vector<string> vector) {
     // concatenate row's matrix
-    ////string matrixAsString
-
+    string s;
+    for (int i = 0; i <vector.size(); i++) {
+        s += vector[i];
+    }
+    std::hash<std::string> hasher;
+    std::string fname = "ServerCacheManager_" + std::to_string(hasher(s)) + ".txt";
+    return fname;
 }

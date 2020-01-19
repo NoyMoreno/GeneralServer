@@ -1,17 +1,16 @@
 //
 // Created by noy on ١٣‏/١‏/٢٠٢٠.
 //
-#define FILE_NAME ("File_ProblemsToSolutions")
 #include "FileCacheManager.h"
 #include <fstream>
 FileCacheManager ::FileCacheManager() {}
 void FileCacheManager:: addToFile(string problem, string solution)
 {
-    std::ofstream file(FILE_NAME);
+    std::ofstream file(problem);
     if(file) {
-        WriteToFile(true, problem, solution);
+        file << problem << " : " << solution << "\n"<<endl;
     } else {
-        WriteToFile(false, problem, solution);
+        cout << "Error opening file\n" << endl;
     }
 }
 bool FileCacheManager::haveSolution(string problem)
@@ -31,24 +30,41 @@ void FileCacheManager:: saveSolution(string problem, string solution)
 {
     this->problemsToSolutions_map[problem] = solution;
 }
-void WriteToFile(bool toAppend, string problem, string solution)
-{
-    std::ofstream file;
-    /* Use append or write flag. */
-    if (toAppend == true)
-    {
-        //add to end of file
-        file.open(FILE_NAME, std::ios_base::app);
-    } else
-    {
-       // Open for input operations.
-        file.open(FILE_NAME, std::ios::in);
-    }
-    if(file.is_open())
-    {
-        file << problem << " : " << solution << "\n"<<endl;
-    } else {
-        cout << "Could not open the file\n" << endl;
-        throw;
-    }
-}
+
+    //private:
+//    StringConverter<P, S> *sc;
+//    std::string get_fname(P p){
+//        // This is our key - convert it to a string
+//        std::string s = sc->ConvertPToString(p);
+//        std::hash<std::string> hasher;
+//        std::string fname = "ServerCacheManager_" + std::to_string(hasher(s)) + ".txt";
+//        return fname;
+//    }
+//public:
+//CacheManager(StringConverter<P, S> *_sc) : sc(_sc) {}
+//    S get(P p) {
+//        // filename
+//        std::string fname = get_fname(p);
+//        // Open
+//        ifstream ifs;
+//        ifs.open(fname);
+//        if (!ifs)
+//            return "";
+//
+//        // Read it in
+//        string str = string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
+//        ifs.close();
+//        S s = sc->ConvertStringToS(str);
+//        return s;
+//    }
+//    void put(P p, S s) {
+//        std::string fname = get_fname(p);
+//        std::string out = sc->ConvertSToString(s);
+//        cout << out << std::endl;
+//        // Write it
+//        ofstream ofs;
+//        ofs.open(fname);
+//        ofs << out;
+//        ofs.close();
+//    }
+//}

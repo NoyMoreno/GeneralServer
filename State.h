@@ -5,11 +5,16 @@
 #ifndef PROJECT2_STATE_H
 #define PROJECT2_STATE_H
 
+#include <iostream>
+
 template<typename T, typename C>
 class State {
 public:
-    State() : m_state(T()), m_cost(C()) {}
-    ~State() { delete m_cameFrom; }
+    State() : m_state(T()), m_cost(C()), m_cameFrom(nullptr) {}
+    ~State() {
+        //if (m_cameFrom != nullptr)
+        //    delete m_cameFrom;
+    }
     State(T state, C cost) : m_state(state), m_cost(cost) {
        m_cameFrom = nullptr;
     }

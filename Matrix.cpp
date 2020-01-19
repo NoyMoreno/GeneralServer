@@ -5,6 +5,7 @@
 #include "Matrix.h"
 #include <sstream>
 #include <regex>
+#include <iostream>
 
 std::vector<double> parseLineToValues(std::string s) {
     std::vector<double> vec;
@@ -38,10 +39,10 @@ Matrix::Matrix(std::vector<std::string> input) {
     }// next row
 
     // Get the start and end - the double of this cells is the i and the j
-    std::vector<double> finalVals = parseLineToValues(input[input.size() - 2]);
+    std::vector<double> finalVals = parseLineToValues(input[input.size() - 3]);
     Cell c(finalVals[0], finalVals[1]);
     startCell = c;
-    finalVals = parseLineToValues(input[input.size() - 1]);
+    finalVals = parseLineToValues(input[input.size() - 2]);
     Cell c2(finalVals[0], finalVals[1]);
     endCell = c2;
 }
@@ -73,7 +74,6 @@ std::vector<State<Cell, double>> Matrix::getAllPossibleStates(State<Cell, double
 
     return vec;
 }
-
-std::string Matrix::problemToString(std::vector<std::string> matrixAsDataClient) {
-    return std::__cxx11::string();
+State<Cell, double> Matrix::getGoalState() {
+    return State<Cell, double>(endCell, _matrix[endCell]);
 }

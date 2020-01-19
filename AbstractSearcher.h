@@ -29,23 +29,18 @@ public:
     virtual std::vector<State<T,C>> search(ISearchable<T, C> *) = 0;
     std::vector<State<T,C>> backtrace(State<T,C> goal, State<T,C> initState) {
         std::vector<State<T,C>> res;
-        State<T,C> temp = goal.getCameFrom();
+        State<T,C> temp = goal;
         while (temp != initState) {
             res.push_back(temp);
             temp = temp.getCameFrom();
-            res.push_back(temp);
+            //res.push_back(temp);
         }
         std::reverse(res.begin(), res.end());
         return res;
     }
 protected:
-    State<T,C> *popOpenList() {
-        evaluatedNodes ++;
-        return queue.pop()._t;
-    }
     MyPriorityQueue<T,C> queue;
     int evaluatedNodes;
-
 };
 
 

@@ -5,9 +5,10 @@
 #ifndef PROJECT2_BESTFIRSTSEARCH_H
 #define PROJECT2_BESTFIRSTSEARCH_H
 
-#include <set>
+#include <unordered_set>
 #include <iterator>
 #include "AbstractSearcher.h"
+#include "Matrix.h"
 
 template<typename T,typename C>
 class BestFirstSearch : public AbstractSearcher<T,C> {
@@ -16,14 +17,17 @@ public:
         // Start the queue with the initial state
         this->queue.push(searchable->getInitialState());
         // Initialize the closeSet, so we don't duplicate
-        std::set<State<T, C>> closeSet;
+        std::unordered_set<T, CellHash> closeSet;
 
         // Go until the queue is empty
         while (!this->queue.empty()) {
             // Get the current item, and make sure we don't go back
             State<T, C> n = this->queue.top();
             this->queue.pop();
-            closeSet.insert(n);
+            if (closeSet.find(n.getT()) != closeSet.end())
+                continue;
+            this->evaluatedNodes++;
+            closeSet.insert(n.getT());
             // Are we at the goal? if so, return
             if (searchable->isGoalState(n)) {
                 return this->backtrace(n, searchable->getInitialState());
@@ -32,7 +36,7 @@ public:
             // Go through all the neighbors!
             for (State<T,C> s : searchable->getAllPossibleStates(n)) {
                 // Have we seen this guy already?
-                if (closeSet.find(s) != closeSet.end())
+                if (closeSet.find(s.getT()) != closeSet.end())
                     continue;
 
                 // Set our new score (everything is copied, so no need to worry about upsetting

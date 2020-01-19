@@ -10,17 +10,18 @@
 #include <string>
 #include <sstream>
 #include "Matrix.h"
-#include "BestFirstSearch.h"
+#include "Astar.h"
 
 class MatrixSearchSolver : public Solver<std::vector<std::string>, std::string> {
 public:
     std::string solve(std::vector<std::string> problem) {
         // Parse the matrix
         Matrix m(problem);
+        std::cout << "finished matrix..." << std::endl;
         // Run best first
-        BestFirstSearch<Cell, double> bfs;
+        Astar<Cell, double> bfs;
         auto res = bfs.search(&m);
-
+        std::cout << bfs.getNumberOfNodesEvaluated() << std::endl;
 
         std::stringstream s;
         // convert to down/up/right/left

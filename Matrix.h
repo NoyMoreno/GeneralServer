@@ -44,12 +44,12 @@ public:
     Matrix(std::vector<std::string> s);
     //get initial state
     State<Cell, double> getInitialState();
+    //get Goal state
+    State<Cell, double> getGoalState();
     // the end
     bool isGoalState(State<Cell, double> state);
     //פונקציית המעברים
     std::vector<State<Cell, double>> getAllPossibleStates(State<Cell, double> state);
-    // convert problem to string
-    std::string problemToString(std::vector<std::string> matrixAsDataClient);
 
     ~Matrix() {
     }

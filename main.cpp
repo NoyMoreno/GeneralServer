@@ -21,10 +21,10 @@ int main(int args, char *argv[]) {
       cout << "No argument receive\n" << endl;
 //      return 0;
    }
-   MatrixSearchSolver solver;
+   Solver<vector<string>, string> *solver = new MatrixSearchSolver();
    //CacheManager<vector<string>, string> *cacheManager = new CacheManager<vector<string>, string>(new MyStringConverter());
    CacheManager<string,string> *cacheManager = new FileCacheManager();
-   ClientHandler *clientHandler = new MyClientHandler(&solver, cacheManager);
+   ClientHandler *clientHandler = new MyClientHandler(solver, cacheManager);
 
    int port = 5600;
 

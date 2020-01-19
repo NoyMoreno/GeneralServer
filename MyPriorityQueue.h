@@ -12,21 +12,24 @@
 template <typename T, typename C>
 struct Compare {
     bool operator()(State<T,C> first, State<T,C> second) {
-        return first < second;
+        return second < first;
     }
 };
 
 //std::priority_queue is basically a thin layer on top of the heap algorithms.
 template <typename T, typename C>
-class MyPriorityQueue : public std::priority_queue<State<T,C>> {//, std::vector<State<T,C>>, Compare<T,C>
+class MyPriorityQueue : public std::priority_queue<State<T,C>, std::vector<State<T,C>>, Compare<T,C>> {//, std::vector<State<T,C>>, Compare<T,C>
 public:
     MyPriorityQueue() {}
     void remove(State<T,C> stateToDel) {
-        // find it
-        auto it = std::find(this->c.begin(), this->c.end(), stateToDel);
-        if (it != this->c.end()) {
-            this->c.erase(it);
-            std::make_heap(this->c.begin(), this->c.end(), this->comp);
+        // find i
+        auto it = this->c.begin();
+        while (it != this->c.end()){
+            if (*it == stateToDel) {
+                this->c.erase(it);
+                break;
+            }
+            else it++;
         }
     }
     State<T, C> find(State<T,C> state, bool *fFound){

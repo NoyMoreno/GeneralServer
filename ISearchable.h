@@ -17,6 +17,7 @@ public:
     virtual bool isGoalState(State <T, C> state) = 0;
     //פונקציית המעברים
     virtual std::vector<State<T, C>> getAllPossibleStates(State<T, C> state) = 0;
+    virtual State<T,C> getGoalState() = 0;
     virtual ~ISearchable() {};
 };
 #endif //PROJECT2_ISEARCHABLE_H
