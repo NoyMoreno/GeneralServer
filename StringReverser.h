@@ -17,6 +17,7 @@ public:
         reverse(problem.begin(), problem.end());
         return problem;
     }
+    ~StringReverser(){}
 };
 
 

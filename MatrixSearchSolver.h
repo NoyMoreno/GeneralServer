@@ -11,6 +11,9 @@
 #include <sstream>
 #include "Matrix.h"
 #include "Astar.h"
+#include "BreadthFirstSearch.h"
+#include "DepthFirstSearch.h"
+#include "BestFirstSearch.h"
 
 class MatrixSearchSolver : public Solver<std::vector<std::string>, std::string> {
 public:
@@ -19,7 +22,7 @@ public:
         Matrix m(problem);
         std::cout << "finished matrix..." << std::endl;
         // Run best first
-        Astar<Cell, double> bfs;
+        BestFirstSearch<Cell, double> bfs;
         auto res = bfs.search(&m);
         std::cout << bfs.getNumberOfNodesEvaluated() << std::endl;
 
@@ -30,6 +33,7 @@ public:
         }
         return s.str();
     }
+    ~MatrixSearchSolver() {}
 };
 
 

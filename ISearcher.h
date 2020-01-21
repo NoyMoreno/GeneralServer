@@ -15,6 +15,7 @@ public:
     // get how many nods were evaluated by the algorithm
     // האלגוריתם שהגיע למסלול הזול ביותר לאחק שעיבד כמות הכי מעטה של קןדקודים הוא הטוב ביותר
     virtual int getNumberOfNodesEvaluated() = 0;
+    virtual ~ISearcher() {};
 };
 
 

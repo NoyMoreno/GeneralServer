@@ -13,6 +13,7 @@ public:
     virtual std::string ConvertPToString(P p) = 0;
     virtual std::string ConvertSToString(S s) =  0;
     virtual S ConvertStringToS(std::string str) = 0;
+    virtual ~StringConverter();
 };
 
 

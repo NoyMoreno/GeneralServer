@@ -9,10 +9,6 @@
 #include "ISearcher.h"
 #include "MyPriorityQueue.h"
 
-struct StatePointerCompare {
-
-};
-
 template <typename T, typename C>
 // my S- is vector of all the nods in shores path T-is T, S- is S ---> for me del after
 class AbstractSearcher : public ISearcher<std::vector<State<T,C>>,T,C> {
@@ -20,6 +16,7 @@ public:
     AbstractSearcher() {
         evaluatedNodes = 0;
     }
+    ~AbstractSearcher(){}
     int openListSize(){
         return queue.size();
     }

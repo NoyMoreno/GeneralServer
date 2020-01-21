@@ -1,23 +1,31 @@
 //
-// Created by noy on ١٤‏/١‏/٢٠٢٠.
+// Created by osboxes on 1/21/20.
 //
 
-#ifndef PROJECT2_BESTFIRSTSEARCH_H
-#define PROJECT2_BESTFIRSTSEARCH_H
+#ifndef PROJECT2_DEPTHFIRSTSEARCH_H
+#define PROJECT2_DEPTHFIRSTSEARCH_H
 
 #include <unordered_set>
 #include <iterator>
 #include "AbstractSearcher.h"
 #include "Matrix.h"
 
-template<typename T,typename C>
-class BestFirstSearch : public AbstractSearcher<T,C> {
+template<typename T, typename C>
+class DepthFirstSearch : public AbstractSearcher<T,C> {
 public:
     std::vector<State<T,C>> search(ISearchable<T, C> *searchable) {
-        // Start the queue with the initial state
-        this->queue.push(searchable->getInitialState());
+
+        std::unordered_map<T, C, CellHash> original_scores_map;
         // Initialize the closeSet, so we don't duplicate
         std::unordered_set<T, CellHash> closeSet;
+
+        // Start the queue with the initial state
+        auto init_state = searchable->getInitialState();
+        original_scores_map[init_state.getT()] = init_state.getC();
+        init_state.setCost(C());
+        this->queue.push(init_state);
+
+        C prev_max_score = 100;// go downwards from there
 
         // Go until the queue is empty
         while (!this->queue.empty()) {
@@ -30,7 +38,13 @@ public:
             closeSet.insert(n.getT());
             // Are we at the goal? if so, return
             if (searchable->isGoalState(n)) {
-                return this->backtrace(n, searchable->getInitialState());
+                auto ret = this->backtrace(n, searchable->getInitialState());
+                // hold up
+                // put the scores back in
+                unsigned i;
+                for (i = 0; i < ret.size(); i++)
+                    ret[i].setCost(original_scores_map[ret[i].getT()]);
+                return ret;
             }
 
             // Go through all the neighbors!
@@ -41,18 +55,16 @@ public:
 
                 // Set our new score (everything is copied, so no need to worry about upsetting
                 // other handles to this object)
-                s.setCost(s.getC() + n.getC());
+                C new_c = original_scores_map[n.getT()] + s.getC();
+                s.setCost(--prev_max_score);
                 s.setCameFrom(n);
                 // Do we have this already in our queue?
                 bool fFound = false;
                 State<T,C> prevInQueue = this->queue.find(s, &fFound);
-                if (fFound) {
-                    // Is it a better score?
-                    if (prevInQueue < s) continue;
-                    this->queue.remove(prevInQueue);
-                }
+                if (fFound) continue;
                 // Add in our score, either we didnt' have it, or we don't have a better score
                 this->queue.push(s);
+                original_scores_map[s.getT()] = new_c;
                 // next neighbor state
             }
             // next item in the open queue
@@ -62,6 +74,4 @@ public:
     }
 };
 
-
-
-#endif //PROJECT2_BESTFIRSTSEARCH_H
+#endif //PROJECT2_DEPTHFIRSTSEARCH_H

@@ -32,7 +32,7 @@ Matrix::Matrix(std::vector<std::string> input) {
     for (iRow = 0; iRow < total_rows; iRow++) {
         // Get all the numbers
         std::vector<double> values = parseLineToValues(input[iRow]);
-        for (int iCol = 0; iCol < values.size(); iCol++) {
+        for (unsigned iCol = 0; iCol < values.size(); iCol++) {
             if (values[iCol] != -1)
                 _matrix[Cell(iRow, iCol)] = values[iCol];
         }

@@ -12,6 +12,7 @@ public:
     MySerialServer(ClientHandler *clientHandler_);
     bool open(int port, ClientHandler *clientHandler);
     void stop();
+    ~MySerialServer(){}
 };
 
 

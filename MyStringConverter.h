@@ -13,6 +13,7 @@
 class MyStringConverter : public StringConverter<std::vector<std::string>, std::string> {
 public:
     MyStringConverter(){}
+    ~MyStringConverter(){}
     std::string ConvertPToString(std::vector<std::string> p) {
         return std::accumulate(p.begin(), p.end(), std::string(""));
     };

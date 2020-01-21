@@ -16,11 +16,11 @@
 using namespace std;
 using namespace server_side;
 int main(int args, char *argv[]) {
-   if (args < 2)
-   {
+   if (args < 2) {
       cout << "No argument receive\n" << endl;
 //      return 0;
    }
+   string s = argv[0];
    Solver<vector<string>, string> *solver = new MatrixSearchSolver();
    //CacheManager<vector<string>, string> *cacheManager = new CacheManager<vector<string>, string>(new MyStringConverter());
    CacheManager<string,string> *cacheManager = new FileCacheManager();

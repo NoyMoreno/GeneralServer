@@ -40,7 +40,7 @@ void MyClientHandler::handleClient(int client_socket) {
 string MyClientHandler::convertMatrixToString(vector<string> vector) {
     // concatenate row's matrix
     string s;
-    for (int i = 0; i <vector.size(); i++) {
+    for (unsigned i = 0; i < vector.size(); i++) {
         s += vector[i];
     }
     std::hash<std::string> hasher;

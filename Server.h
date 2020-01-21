@@ -16,6 +16,7 @@ namespace server_side {
         bool fClose;
         std::mutex close_mutex;
         ClientHandler *m_clientHandler;
+        virtual ~Server(){};
     public:
         Server(ClientHandler *clientHandler) : fClose{false}, close_mutex{},
                                                m_clientHandler{clientHandler}
