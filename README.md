@@ -15,6 +15,7 @@ The server is a generic class that defines the base functions needed for a serve
 The ClientHandler is a generic component which gets notified when there is a request from a client, reads in the request, handles it according to a specific module, and returns the answer. 
 Within the ClientHandler, we have two more components:
 - The first is the Solver. When implementing a specific handler, we define the type of input and type of output, but in addition we need some algorithm which will take the input and return the answer. That is the solver. It is a generically defined class with the input/output functions, and each algorithm inherits from this class and implements a search in it's own way.
+> As can be seen in "Algorithms10RunsTestResults.pdf", the best algorithm for searching is AStar, so that is our default algorithm.
 - The second is the CacheManager. In order to avoid duplication, whenever we get a request and solve it, we save the result to a unique file, and then if the same input is requested again, we already saved how to solve it so we don't processing power solving it again.
   - The CacheManager is a generic class, and we implemented a FileCacheManager which saves it to the file.
   
