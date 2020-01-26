@@ -28,9 +28,41 @@ public:
 
         std::stringstream s;
         // convert to down/up/right/left
-        for (auto state : res) {
-            s << "(" << state.getT().getI() << "," << state.getT().getJ() << ") [" << state.getC() << "]" << std::endl;
+        int preI = res.at(0).getT().getI();
+        int preJ = res.at(0).getT().getJ();
+        std::string solution;
+        for (auto cur : res )
+        {
+            int curI = cur.getT().getI();
+            int curJ = cur.getT().getJ();
+            if (curI > preI)
+            {
+               solution += "Down,";
+            }
+            if (curI < preI)
+            {
+                solution += "Up,";
+            }
+            if (curJ > preJ)
+            {
+                solution += "Right,";
+            }
+            if (curJ < preJ)
+            {
+                solution += "Left,";
+            }
+            // next
+            preI = curI;
+            preJ = curJ;
         }
+        // delete the last ,
+        solution.erase(solution.length() - 1, 1);
+        return solution;
+
+//      for (auto state : res) {
+//            s << "(" << state.getT().getI() << "," << state.getT().getJ() << ") [" << state.getC() << "]" << std::endl;
+//        }
+
         return s.str();
     }
     ~MatrixSearchSolver() {}
