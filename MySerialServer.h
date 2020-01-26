@@ -7,12 +7,28 @@
 
 #include "Server.h"
 
+//namespace std
+//{
+//    class thread;
+//}
+
 class MySerialServer : public server_side::Server {
+protected:
+    int m_port;
+    bool m_stop = false;
+    bool connection_made = false;
 public:
-    MySerialServer(ClientHandler *clientHandler_);
+    MySerialServer();
     bool open(int port, ClientHandler *clientHandler);
     void stop();
     ~MySerialServer(){}
+
+private:
+    bool timeout = false;
+    std::thread *m_t;
+    //void HandleCommunication(int i);
+
+    void HandleCommunication();
 };
 
 
