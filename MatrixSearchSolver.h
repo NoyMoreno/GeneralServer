@@ -20,11 +20,9 @@ public:
     std::string solve(std::vector<std::string> problem) {
         // Parse the matrix
         Matrix m(problem);
-        std::cout << "finished matrix..." << std::endl;
-        // Run best first
-        BestFirstSearch<Cell, double> bfs;
-        auto res = bfs.search(&m);
-        std::cout << bfs.getNumberOfNodesEvaluated() << std::endl;
+        // Run A*
+        Astar<Cell, double> as;
+        auto res = as.search(&m);
 
         std::stringstream s;
         // convert to down/up/right/left
@@ -58,12 +56,6 @@ public:
         // delete the last ,
         solution.erase(solution.length() - 1, 1);
         return solution;
-
-//      for (auto state : res) {
-//            s << "(" << state.getT().getI() << "," << state.getT().getJ() << ") [" << state.getC() << "]" << std::endl;
-//        }
-
-        return s.str();
     }
     ~MatrixSearchSolver() {}
 };
