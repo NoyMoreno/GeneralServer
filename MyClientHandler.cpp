@@ -39,12 +39,11 @@ void MyClientHandler::handleClient(int client_socket) {
     else { // if its the first we sendolve it, and then save it in cache manger.
          //solve it
         string res = this->m_solver->solve(clientData);
-        cout << res << endl;
+        //cout << res << endl;
         // save it
         this->m_cacheManager->saveSolution(convert, res);
         // send the solution
         send(client_socket, res.c_str(), res.length(), 0);
-
     }
 }
 /*convert matrix to string so we will store it in cache manger*/

@@ -6,6 +6,9 @@
 #define PROJECT2_MYSERIALSERVER_H
 
 #include "Server.h"
+#include <chrono>
+#include <condition_variable>
+#include <mutex>
 
 //namespace std
 //{
@@ -24,10 +27,10 @@ public:
     ~MySerialServer(){}
 
 private:
-    bool timeout = false;
+    std::condition_variable cv;
     std::thread *m_t;
+    int socketfd;
     //void HandleCommunication(int i);
-
     void HandleCommunication();
 };
 

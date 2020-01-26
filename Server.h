@@ -18,14 +18,7 @@ namespace server_side {
         ClientHandler *m_clientHandler;
         virtual ~Server(){};
     public:
-        Server(ClientHandler *clientHandler) : fClose{false}, close_mutex{},
-                                               m_clientHandler{clientHandler}
-        {
-            if(clientHandler == nullptr)
-            {
-                throw;
-            }
-        }
+        Server() : fClose(false), close_mutex() { }
         virtual bool open(int port, ClientHandler *clientHandler) = 0;
         virtual void stop() = 0;
     };

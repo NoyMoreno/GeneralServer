@@ -19,102 +19,47 @@
 
 using namespace std;
 MyParallelServer::MyParallelServer() : server_side::Server(){}
-//bool MySerialServer::open(int port, ClientHandler *clientHandler) {
-//    this->HandleCommunication(port);
-//    while (!this->m_stop) {
-//        socketfd = accept(socketfd, (struct sockaddr *) &client_address,
-//                                                (socklen_t *) &len);
-//        if (socketfd < 0) {
-//            if (errno == EWOULDBLOCK) {
-//                if (connection_made) {
-//                    // first communication
-//                    continue;
-//                }
-//                cout << "timeout!" << endl;
-//                break;
-//            } else {
-//                perror("other error");
-//            }
-//        }
-//        connection_made = false;
-//        //handle client, when finished, move on to the next client.
-//        this->m_clientHandler->handleClient(socketfd);
-//    }
-//    //server closed
-//    close(socketfd);
-//}
-//
-//void MySerialServer::stop()
-//{
-//    this->m_stop = true;
-//}
-
 bool MyParallelServer::open(int port, ClientHandler *clientHandler) {
     m_port = port;
     m_clientHandler = clientHandler;
+    m_t = new thread([this]() {
+        this->HandleCommunication();
+    });
+    //m_t->detach();
     std::mutex m;
-    std::condition_variable cv;
-    int retValue;
-    connected_once = false;
-
-    m_t = new thread([&cv,this]()
-                               {
-                                   this->HandleCommunication();
-                                   cv.notify_one();
-                               });
-
-//    timout_thread = new thread([this]()
-//                     {
-//                        std::this_thread::sleep_for(2s);
-//                         if (!connected_once){
-//                             stop();
-//                            // put here code that causes the m_t thread to terminate
-//                         }
-//                     });
-    m_t->join();
-    stop();
-    {
-        std::unique_lock<std::mutex> l(m);
-        if(cv.wait_for(l, 10s) == std::cv_status::timeout)
+    unique_lock<mutex> l(m);
+    std::cv_status out;
+    while (1) {
+        out = cv.wait_for(l, chrono::seconds(10));
+        if (out == std::cv_status::timeout) {
+            if (m_stop) break;
+            close(socketfd);
+            cout << "Timeout waiting for client... exiting" << endl;
             return false;
-        // this->stop();
-        //throw std::runtime_error("Timeout");
+        }
+        if (m_stop)
+            break;
     }
-
-//    m_port = port;
-//    m_t = new thread([this]{this->HandleCommunication();});
-//
-//    if (m_t == nullptr)
-//    {
-//        return false;
-//    }
-//    m_t->join();
-//    this->stop();
+    delete(m_t);
+    for (auto t : this->threads)
+        t->join();
+    return true;
 }
-void MyParallelServer::stop()
-{
-    if (m_t != nullptr)
-    {
-        delete(m_t);
-    }
-    for (std::vector<std::thread*>::iterator iter = threads.begin(); iter != threads.end();++iter)
-    {
-        delete *iter;
-    }
+void MyParallelServer::stop() {
+    close(socketfd);
+    m_stop = true;
 }
 
-void MyParallelServer::HandleCommunication()
-{
-    cout << "hii" << endl;
+void MyParallelServer::HandleCommunication() {
     //create socket
-    int socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1) {
         //error
         std::cerr << "Could not create a socket"<<std::endl;
+        m_stop = true;
+        cv.notify_one();
         return;
     }
-    /*size_t t1 = 2, t2 = sizeof(int);
-    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, &t1, t2);*/
     //bind socket to IP address
     // we first need to create the sockaddr obj.
     sockaddr_in address; //in means IP4
@@ -125,53 +70,51 @@ void MyParallelServer::HandleCommunication()
     //the actual bind command
     if (bind(socketfd, reinterpret_cast<struct sockaddr *>(&address), sizeof(address)) == -1) {
         std::cerr<<"Could not bind the socket to an IP"<<std::endl;
+        m_stop = true;
+        close(socketfd);
+        cv.notify_one();
         return;
     }
     //making socket listen to the port
     if (listen(socketfd, 5) == -1) {
         std::cerr<<"Error during listening command"<<std::endl;
+        m_stop = true;
+        close(socketfd);
+        cv.notify_one();
         return;
     } else{
         std::cout<<"Server is now listening ..."<<std::endl;
     }
-
-
-    while (true)
-    {
+    while (true) {
         socklen_t len = sizeof(address);
-        future<int> accept_thread = async(accept, socketfd, (struct sockaddr *) &address,
-                                          (socklen_t *) &len);
-        client_socket = accept_thread.get();
-        cout << "accepted a client!!!" << endl;
+        int client_socket = accept(socketfd, (struct sockaddr *) &address, (socklen_t *) &len);
+        cv.notify_one();
+        //cout << "accepted a client!!!" << endl;
         try {
-//            socklen_t len = sizeof(address);
-//            future<int> accept_thread = async(accept, socketfd, (struct sockaddr *) &address,
-//                                              (socklen_t *) &len);
-
             if (client_socket == -1) {
                 std::cerr << "Error accepting client" << std::endl;
+                close(socketfd);
                 return;
             }
 
-            connected_once = true;
-            cout << "Connection made!" << endl;
             // We separated communication from the way we communicate.
             //In this function we will begin to communicate
-
             // For the parallel open a thread here.
-            std::thread* t = new thread([this]()
-                             {
-                                int c = client_socket;
-                                 m_clientHandler->handleClient(c);
-                                 close(c);
-                             });
+            std::thread* t = new thread([client_socket, this]() {
+                int c = client_socket;
+                m_clientHandler->handleClient(c);
+                close(c);
+            });
+            t->detach();
             threads.push_back(t);
         }
         catch(std::runtime_error& e) {
+            cout << "Timeout" << endl;
             std::cout << e.what() << std::endl;
             this->timeout = true;
+            close(socketfd);
+            return;
         }
-
 
     }
 }

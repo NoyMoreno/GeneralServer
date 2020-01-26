@@ -7,13 +7,13 @@
 
 #include <thread>
 #include <vector>
+#include <condition_variable>
 #include "Server.h"
 
 class ClientHandler;
 
 class MyParallelServer : public server_side::Server{
 protected:
-    int client_socket;
     int m_port;
     bool m_stop = false;
     bool connection_made = false;
@@ -26,9 +26,9 @@ public:
 private:
     bool timeout = false;
     std::thread *m_t;
-    std::thread *timout_thread;
     std::vector<std::thread*> threads;
-    bool connected_once;
+    std::condition_variable cv;
+    int socketfd;
     //void HandleCommunication(int i);
 
     void HandleCommunication();

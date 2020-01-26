@@ -11,6 +11,7 @@
 #include "ISearcher.h"
 #include "MyStringConverter.h"
 #include "MatrixSearchSolver.h"
+#include "MyParallelServer.h"
 #include "Server.h"
 
 using namespace std;
@@ -29,6 +30,6 @@ int main(int args, char *argv[]) {
    int port = 5600;
 
    //int port = atoi(argv[0]);
-   Server *server = new MySerialServer(clientHandler);
+   Server *server = new MyParallelServer();
    server->open(port, clientHandler);
 }
