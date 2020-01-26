@@ -16,17 +16,17 @@
 using namespace std;
 using namespace server_side;
     int main(int args, char *argv[]) {
-        if (args < 2) {
-            cout << "No argument receive\n" << endl;
-            return 0;
-        }
+        int port = 5600;
+        if (args >= 2)
+            port = stoi(argv[1]);
+        else 
+            cout << "No argument received - using port 5600" << endl;
+
         string s = argv[0];
         Solver<vector < string>, string > *solver = new MatrixSearchSolver();
         //CacheManager<vector<string>, string> *cacheManager = new CacheManager<vector<string>, string>(new MyStringConverter());
         CacheManager<string, string> *cacheManager = new FileCacheManager();
         ClientHandler *clientHandler = new MyClientHandler(solver, cacheManager);
-
-        int port = stoi(argv[1]);
 
         //int port = atoi(argv[0]);
         Server *server = new MyParallelServer();
