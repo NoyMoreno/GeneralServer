@@ -4,31 +4,35 @@
 #include "FileCacheManager.h"
 #include <fstream>
 FileCacheManager ::FileCacheManager() {}
-void FileCacheManager:: addToFile(string problem, string solution)
+bool FileCacheManager::haveSolution(string problem)
 {
     std::ofstream file(problem);
     if(file) {
-        file << problem << " : " << solution << "\n"<<endl;
+        return true;
     } else {
-        cout << "Error opening file\n" << endl;
-    }
-}
-bool FileCacheManager::haveSolution(string problem)
-{
-    // If key not found in map
-    if (this->problemsToSolutions_map.find(problem) == problemsToSolutions_map.end())
         return false;
-    return true;
+    }
 }
 // get the solution. The user have to check if the solution isSaved cameFrom get it.
 string FileCacheManager::getSolution(string problem)
 {
-    return this->problemsToSolutions_map[problem];
+    string line;
+    ifstream myfile (problem);
+    if (myfile.is_open())
+    {
+         getline (myfile,line);
+         myfile.close();
+    }
+    else cout << "Unable to open file";
+    return line;
 }
 // save the solution to the problem
 void FileCacheManager:: saveSolution(string problem, string solution)
 {
-    this->problemsToSolutions_map[problem] = solution;
+    std::fstream fs;
+    fs.open (problem, std::fstream::in | std::fstream::out | std::fstream::app);
+    fs << solution;
+    fs.close();
 }
 
     //private:

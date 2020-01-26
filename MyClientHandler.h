@@ -24,9 +24,9 @@ protected:
     CacheManager<string, string> *m_cacheManager;
 public:
     MyClientHandler(Solver<vector<string>, string> *solver, CacheManager<string, string> *cacheManager_);
-    ~MyClientHandler() {}
-    void handleClient(int socket);
     string convertMatrixToString(vector<string> vector);
+    void handleClient(int client_socket);
+
 };
 
 

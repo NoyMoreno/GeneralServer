@@ -11,8 +11,6 @@
 #include "CacheManager.h"
 
 class FileCacheManager : public CacheManager <string, string> {
-private:
-    std::unordered_map<std::string, std::string> problemsToSolutions_map;
 public:
     FileCacheManager();
     // check if the solution already exist.

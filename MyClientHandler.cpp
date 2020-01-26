@@ -18,6 +18,7 @@ void MyClientHandler::handleClient(int client_socket) {
     vector<string> clientData;
     char buffer[1024] = {0};
     int r;
+    // read info
     while ((r = read(client_socket, buffer, 1024))) {
         buffer[r] = 0;
         string curS = string(buffer);
@@ -26,17 +27,27 @@ void MyClientHandler::handleClient(int client_socket) {
             break;
     }
     // check if we solve it already
-    this->m_cacheManager->haveSolution(convertMatrixToString(clientData));
-    string res = this->m_solver->solve(clientData);
-    cout << res << endl;
+    string convert = convertMatrixToString(clientData);
+    if(this->m_cacheManager->haveSolution(convert))
+    {
+         //get the solution from cache manger
+        string res = this->m_cacheManager->getSolution(convert);
+         //send it
+        send(client_socket, res.c_str(), res.length(), 0);
+        return;
+    }
+    else { // if its the first we sendolve it, and then save it in cache manger.
+         //solve it
+        string res = this->m_solver->solve(clientData);
+        cout << res << endl;
+        // save it
+        this->m_cacheManager->saveSolution(convert, res);
+        // send the solution
+        send(client_socket, res.c_str(), res.length(), 0);
 
-
-//    std::string res = cacheManager->get(clientData);
-//    if (res.compare(""))
-//        return;
-//    cacheManager->put(clientData, s->solve(clientData));
+    }
 }
-//***********************************************************************************
+/*convert matrix to string so we will store it in cache manger*/
 string MyClientHandler::convertMatrixToString(vector<string> vector) {
     // concatenate row's matrix
     string s;
